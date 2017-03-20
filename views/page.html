@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>{{ page.title }}&nbsp;<small>{{ page.publishedDate }}</small></h3>
-    <h5>{{ page.author }}</h5>
+    <h3>{{ page.title }}</h3>
+    <h5>{{ page.publishedDate | int | date("dddd, MMMM Do YYYY, h:mm a") }} by {{ page.author }}</h5>
     <p>{{ page.description }}</p>
 {% endblock %}
