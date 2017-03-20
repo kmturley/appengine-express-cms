@@ -43,7 +43,7 @@ router.get('/', (req, res, next) => {
       next(err);
       return;
     }
-    res.render('pages/list.jade', {
+    res.render('list.html', {
       pages: entities,
       nextPageToken: cursor
     });
@@ -57,7 +57,7 @@ router.get('/', (req, res, next) => {
  */
 // [START add_get]
 router.get('/add', (req, res) => {
-  res.render('pages/form.jade', {
+  res.render('form.html', {
     page: {},
     action: 'Add'
   });
@@ -95,7 +95,7 @@ router.get('/:page/edit', (req, res, next) => {
       next(err);
       return;
     }
-    res.render('pages/form.jade', {
+    res.render('form.html', {
       page: entity,
       action: 'Edit'
     });
@@ -130,7 +130,7 @@ router.get('/:page', (req, res, next) => {
       next(err);
       return;
     }
-    res.render('pages/view.jade', {
+    res.render('view.html', {
       page: entity
     });
   });

@@ -16,12 +16,15 @@
 const path = require('path');
 const express = require('express');
 const config = require('./config');
+const nunjucks = require('nunjucks');
 
 const app = express();
 
 app.disable('etag');
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+nunjucks.configure('views', {
+    autoescape: true,
+    express: app
+});
 app.set('trust proxy', true);
 
 // Pages

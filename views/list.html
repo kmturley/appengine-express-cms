@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3>Pages</h3>
+    <a href="/pages/add" class="btn btn-success btn-sm">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span> Add page</span>
+    </a>
+    {% for page in pages %}
+        <div class="media">
+            <a href="/pages/{{ page.id }}">
+                <div class="media-body">
+                    <h4>{{ page.title }}</h4>
+                    <p>{{ page.description }}</p>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+{% endblock %}
