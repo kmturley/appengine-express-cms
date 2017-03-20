@@ -43,79 +43,10 @@ router.get('/', (req, res, next) => {
       next(err);
       return;
     }
-    res.render('admin/list.html', {
+    res.render('home.html', {
       pages: entities,
       nextPageToken: cursor
     });
-  });
-});
-
-/**
- * GET /pages/add
- *
- * Display a form for creating a page.
- */
-// [START add_get]
-router.get('/add', (req, res) => {
-  res.render('admin/form.html', {
-    page: {},
-    action: 'Add'
-  });
-});
-// [END add_get]
-
-/**
- * POST /pages/add
- *
- * Create a page.
- */
-// [START add_post]
-router.post('/add', (req, res, next) => {
-  const data = req.body;
-
-  // Save the data to the database.
-  getModel().create(data, (err, savedData) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.redirect(`${req.baseUrl}/${savedData.id}`);
-  });
-});
-// [END add_post]
-
-/**
- * GET /pages/:id/edit
- *
- * Display a page for editing.
- */
-router.get('/:page/edit', (req, res, next) => {
-  getModel().read(req.params.page, (err, entity) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.render('admin/form.html', {
-      page: entity,
-      action: 'Edit'
-    });
-  });
-});
-
-/**
- * POST /pages/:id/edit
- *
- * Update a page.
- */
-router.post('/:page/edit', (req, res, next) => {
-  const data = req.body;
-
-  getModel().update(req.params.page, data, (err, savedData) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.redirect(`${req.baseUrl}/${savedData.id}`);
   });
 });
 
@@ -125,29 +56,22 @@ router.post('/:page/edit', (req, res, next) => {
  * Display a page.
  */
 router.get('/:page', (req, res, next) => {
-  getModel().read(req.params.page, (err, entity) => {
+  getModel().list(10, req.query.pageToken, (err, entities, cursor) => {
     if (err) {
       next(err);
       return;
     }
-    res.render('admin/view.html', {
-      page: entity
+    getModel().read(req.params.page, (err, entity) => {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.render('page.html', {
+        page: entity,
+        pages: entities,
+        nextPageToken: cursor
+      });
     });
-  });
-});
-
-/**
- * GET /pages/:id/delete
- *
- * Delete a page.
- */
-router.get('/:page/delete', (req, res, next) => {
-  getModel().delete(req.params.page, (err) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.redirect(req.baseUrl);
   });
 });
 

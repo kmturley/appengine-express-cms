@@ -28,7 +28,8 @@ nunjucks.configure('views', {
 app.set('trust proxy', true);
 
 // Pages
-app.use('/pages', require('./pages/crud'));
+app.use('/pages', require('./pages/templates'));
+app.use('/admin', require('./pages/crud'));
 app.use('/api/pages', require('./pages/api'));
 
 // Redirect root to /pages
