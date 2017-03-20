@@ -15,6 +15,7 @@
 
 const path = require('path');
 const express = require('express');
+const helmet = require('helmet');
 const config = require('./config');
 const nunjucks = require('nunjucks');
 const nunjucksDateFilter = require('nunjucks-date-filter');
@@ -27,6 +28,15 @@ const env = nunjucks.configure('views', {
     express: app
 });
 env.addFilter('date', nunjucksDateFilter);
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
+    styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+  }
+}))
+app.disable('x-powered-by');
 app.set('trust proxy', true);
 
 // Pages
