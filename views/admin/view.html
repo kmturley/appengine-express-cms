@@ -14,8 +14,8 @@
     </div>
     <div class="media">
         <div class="media-body">
-            <h4>{{ page.title }}&nbsp;<small>{{ page.publishedDate }}</small></h4>
-            <h5>{{ page.author }}</h5>
+            <h4>{{ page.title }}</h4>
+            <h5>{{ page.publishedDate | int | date("dddd, MMMM Do YYYY, h:mm a") }} by {{ page.author }}</h5>
             <p>{{ page.description }}</p>
         </div>
     </div>

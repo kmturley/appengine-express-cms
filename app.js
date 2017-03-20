@@ -17,14 +17,16 @@ const path = require('path');
 const express = require('express');
 const config = require('./config');
 const nunjucks = require('nunjucks');
+const nunjucksDateFilter = require('nunjucks-date-filter');
 
 const app = express();
-
+app.locals.date = new Date();
 app.disable('etag');
-nunjucks.configure('views', {
+const env = nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
+env.addFilter('date', nunjucksDateFilter);
 app.set('trust proxy', true);
 
 // Pages

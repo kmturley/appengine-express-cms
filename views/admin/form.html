@@ -12,13 +12,10 @@
             <input type="text" name="author" id="author" value="{{ page.author }}" class="form-control">
         </div>
         <div class="form-group">
-            <label for="publishedDate">Date Published</label>
-            <input type="text" name="publishedDate" id="publishedDate" value="{{ page.publishedDate }}" class="form-control">
-        </div>
-        <div class="form-group">
             <label for="description">Description</label>
             <input type="text" name="description" id="description" value="{{ page.description }}" class="form-control">
         </div>
+        <input type="hidden" name="publishedDate" id="publishedDate" value="{{ date.getTime() }}" class="form-control">
         <button type="submit" class="btn btn-success">Save</button>
     </form>
 {% endblock %}
