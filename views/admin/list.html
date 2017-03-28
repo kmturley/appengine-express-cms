@@ -11,7 +11,7 @@
             <a href="/admin/{{ page.id }}">
                 <div class="media-body">
                     <h4>{{ page.title }}</h4>
-                    <p>{{ page.description }}</p>
+                    <p>{{ page.description | safe }}</p>
                 </div>
             </a>
         </div>

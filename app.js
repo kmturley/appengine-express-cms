@@ -24,7 +24,7 @@ const app = express();
 app.locals.date = new Date();
 app.disable('etag');
 const env = nunjucks.configure('views', {
-    autoescape: true,
+    autoescape: false,
     express: app
 });
 env.addFilter('date', nunjucksDateFilter);
@@ -33,13 +33,15 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
     fontSrc: ["'self'", 'maxcdn.bootstrapcdn.com'],
-    styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com']
+    scriptSrc: ["'self'", 'cdn.jsdelivr.net'],
+    styleSrc: ["'self'", 'maxcdn.bootstrapcdn.com', 'cdn.jsdelivr.net']
   }
 }))
 app.disable('x-powered-by');
 app.set('trust proxy', true);
 
 // Pages
+app.use(express.static('public'))
 app.use('/pages', require('./pages/templates'));
 app.use('/admin', require('./pages/crud'));
 app.use('/api/pages', require('./pages/api'));
