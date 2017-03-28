@@ -27,29 +27,29 @@ module.exports = (DATA_BACKEND) => {
       appConfig.set(`DATA_BACKEND`, DATA_BACKEND);
     });
 
-    describe(`/pages`, () => {
+    describe(`/books`, () => {
       let id;
 
-      // setup a page
+      // setup a book
       before((done) => {
         utils.getRequest(config)
-          .post(`/api/pages`)
-          .send({ title: `my page` })
+          .post(`/api/books`)
+          .send({ title: `my book` })
           .expect(200)
           .expect((response) => {
             id = response.body.id;
             assert.ok(response.body.id);
-            assert.equal(response.body.title, `my page`);
+            assert.equal(response.body.title, `my book`);
           })
           .end(done);
       });
 
-      it(`should show a list of pages`, (done) => {
+      it(`should show a list of books`, (done) => {
         // Give Datastore time to become consistent
         setTimeout(() => {
           const expected = `<div class="media-body">`;
           utils.getRequest(config)
-            .get(`/pages`)
+            .get(`/books`)
             .expect(200)
             .expect((response) => {
               assert.equal(response.text.includes(expected), true);
@@ -60,17 +60,17 @@ module.exports = (DATA_BACKEND) => {
 
       it(`should handle error`, (done) => {
         utils.getRequest(config)
-          .get(`/pages`)
+          .get(`/books`)
           .query({ pageToken: `badrequest` })
           .expect(500)
           .end(done);
       });
 
-      // delete the page
+      // delete the book
       after((done) => {
         if (id) {
           utils.getRequest(config)
-            .delete(`/api/pages/${id}`)
+            .delete(`/api/books/${id}`)
             .expect(200)
             .end(done);
         } else {
@@ -79,42 +79,42 @@ module.exports = (DATA_BACKEND) => {
       });
     });
 
-    describe(`/pages/add`, () => {
+    describe(`/books/add`, () => {
       let id;
 
-      it(`should post to add page form`, (done) => {
+      it(`should post to add book form`, (done) => {
         utils.getRequest(config)
-          .post(`/pages/add`)
-          .send(`title=my%20page`)
+          .post(`/books/add`)
+          .field(`title`, `my book`)
           .expect(302)
           .expect((response) => {
             const location = response.headers.location;
-            const idPart = location.replace(`/pages/`, ``);
+            const idPart = location.replace(`/books/`, ``);
             if (require(`../config`).get(`DATA_BACKEND`) !== `mongodb`) {
               id = parseInt(idPart, 10);
             } else {
               id = idPart;
             }
-            assert.equal(response.text.includes(`Redirecting to /pages/`), true);
+            assert.equal(response.text.includes(`Redirecting to /books/`), true);
           })
           .end(done);
       });
 
-      it(`should show add page form`, (done) => {
+      it(`should show add book form`, (done) => {
         utils.getRequest(config)
-          .get(`/pages/add`)
+          .get(`/books/add`)
           .expect(200)
           .expect((response) => {
-            assert.equal(response.text.includes(`Add page`), true);
+            assert.equal(response.text.includes(`Add book`), true);
           })
           .end(done);
       });
 
-      // delete the page
+      // delete the book
       after((done) => {
         if (id) {
           utils.getRequest(config)
-            .delete(`/api/pages/${id}`)
+            .delete(`/api/books/${id}`)
             .expect(200)
             .end(done);
         } else {
@@ -123,28 +123,28 @@ module.exports = (DATA_BACKEND) => {
       });
     });
 
-    describe(`/pages/:page/edit & /pages/:page`, () => {
+    describe(`/books/:book/edit & /books/:book`, () => {
       let id;
 
-      // setup a page
+      // setup a book
       before((done) => {
         utils.getRequest(config)
-          .post(`/api/pages`)
-          .send({ title: `my page` })
+          .post(`/api/books`)
+          .send({ title: `my book` })
           .expect(200)
           .expect((response) => {
             id = response.body.id;
             assert.ok(response.body.id);
-            assert.equal(response.body.title, `my page`);
+            assert.equal(response.body.title, `my book`);
           })
           .end(done);
       });
 
-      it(`should update a page`, (done) => {
-        const expected = `Redirecting to /pages/${id}`;
+      it(`should update a book`, (done) => {
+        const expected = `Redirecting to /books/${id}`;
         utils.getRequest(config)
-          .post(`/pages/${id}/edit`)
-          .send(`title=my%20other%20page`)
+          .post(`/books/${id}/edit`)
+          .field(`title`, `my other book`)
           .expect(302)
           .expect((response) => {
             assert.equal(response.text.includes(expected), true);
@@ -152,24 +152,11 @@ module.exports = (DATA_BACKEND) => {
           .end(done);
       });
 
-      it(`should show edit page form`, (done) => {
+      it(`should show edit book form`, (done) => {
         const expected =
-          `<input type="text" name="title" id="title" value="my other page" class="form-control">`;
+          `<input type="text" name="title" id="title" value="my other book" class="form-control">`;
         utils.getRequest(config)
-          .get(`/pages/${id}/edit`)
-          .expect(200)
-          .expect((response) => {
-            console.log('RT', response.text);
-            console.log('expected', expected);
-            assert.equal(response.text.includes(expected), true);
-          })
-          .end(done);
-      });
-
-      it(`should show a page`, (done) => {
-        const expected = `<h4>my other page&nbsp;<small></small></h4>`;
-        utils.getRequest(config)
-          .get(`/pages/${id}`)
+          .get(`/books/${id}/edit`)
           .expect(200)
           .expect((response) => {
             assert.equal(response.text.includes(expected), true);
@@ -177,10 +164,21 @@ module.exports = (DATA_BACKEND) => {
           .end(done);
       });
 
-      it(`should delete a page`, (done) => {
-        const expected = `Redirecting to /pages`;
+      it(`should show a book`, (done) => {
+        const expected = `<h4>my other book&nbsp;<small></small></h4>`;
         utils.getRequest(config)
-          .get(`/pages/${id}/delete`)
+          .get(`/books/${id}`)
+          .expect(200)
+          .expect((response) => {
+            assert.equal(response.text.includes(expected), true);
+          })
+          .end(done);
+      });
+
+      it(`should delete a book`, (done) => {
+        const expected = `Redirecting to /books`;
+        utils.getRequest(config)
+          .get(`/books/${id}/delete`)
           .expect(302)
           .expect((response) => {
             id = undefined;
@@ -193,7 +191,7 @@ module.exports = (DATA_BACKEND) => {
       after((done) => {
         if (id) {
           utils.getRequest(config)
-            .delete(`/api/pages/${id}`)
+            .delete(`/api/books/${id}`)
             .expect(200)
             .end(done);
         } else {

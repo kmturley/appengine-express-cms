@@ -23,7 +23,7 @@ describe(`${config.test}/`, () => {
     }).timeout(120 * 1000);
   }
   require(`./app.test`);
-  describe(`pages/`, () => {
+  describe(`books/`, () => {
     const appConfig = require(`../config`);
     const DATA_BACKEND = appConfig.get(`DATA_BACKEND`);
     if (DATA_BACKEND === `datastore` || process.env.TEST_DATASTORE) {
@@ -39,4 +39,9 @@ describe(`${config.test}/`, () => {
       require(`./crud.test`)(`mongodb`);
     }
   });
+  if (!process.env.E2E_TESTS) {
+    describe(`lib/`, () => {
+      require(`./oauth2.test`);
+    });
+  }
 });

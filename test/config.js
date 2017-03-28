@@ -16,10 +16,10 @@
 const path = require(`path`);
 
 module.exports = {
-  test: `2-structured-data`,
+  test: `4-auth`,
   cwd: path.resolve(path.join(__dirname, `../`)),
   cmd: `node`,
   args: [`app.js`],
-  port: 8082,
-  msg: `CMS`
+  port: 8084,
+  msg: `Bookshelf`
 };

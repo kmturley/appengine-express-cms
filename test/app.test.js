@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-`use strict`;
+'use strict';
 
 const assert = require(`assert`);
 const config = require(`./config`);
@@ -26,12 +26,12 @@ describe(`app.js`, () => {
     });
   }
 
-  it(`should redirect / to /pages`, (done) => {
+  it(`should redirect / to /books`, (done) => {
     utils.getRequest(config)
       .get(`/`)
       .expect(302)
       .expect((response) => {
-        assert.equal(response.text.includes(`Redirecting to /pages`), true);
+        assert.equal(response.text.includes(`Redirecting to /books`), true);
       })
       .end(done);
   });
@@ -58,6 +58,21 @@ describe(`app.js`, () => {
     }, Error, getMsg(`GCLOUD_PROJECT`));
 
     nconfMock.GCLOUD_PROJECT = `project`;
+    assert.throws(() => {
+      proxyquire(`../config`, { nconf: nconfMock });
+    }, Error, getMsg(`CLOUD_BUCKET`));
+
+    nconfMock.CLOUD_BUCKET = `bucket`;
+    assert.throws(() => {
+      proxyquire(`../config`, { nconf: nconfMock });
+    }, Error, getMsg(`OAUTH2_CLIENT_ID`));
+
+    nconfMock.OAUTH2_CLIENT_ID = `foo`;
+    assert.throws(() => {
+      proxyquire(`../config`, { nconf: nconfMock });
+    }, Error, getMsg(`OAUTH2_CLIENT_SECRET`));
+
+    nconfMock.OAUTH2_CLIENT_SECRET = `bar`;
     assert.doesNotThrow(() => {
       proxyquire(`../config`, { nconf: nconfMock });
     });

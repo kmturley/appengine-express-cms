@@ -28,9 +28,9 @@ module.exports = (DATA_BACKEND) => {
       appConfig.set(`DATA_BACKEND`, DATA_BACKEND);
     });
 
-    it(`should create a page`, (done) => {
+    it(`should create a book`, (done) => {
       utils.getRequest(config)
-        .post(`/api/pages`)
+        .post(`/api/books`)
         .send({ title: `beep` })
         .expect(200)
         .expect((response) => {
@@ -41,11 +41,11 @@ module.exports = (DATA_BACKEND) => {
         .end(done);
     });
 
-    it(`should list pages`, (done) => {
+    it(`should list books`, (done) => {
       // Give Datastore time to become consistent
       setTimeout(() => {
         utils.getRequest(config)
-          .get(`/api/pages`)
+          .get(`/api/books`)
           .expect(200)
           .expect((response) => {
             assert.ok(Array.isArray(response.body.items));
@@ -55,9 +55,9 @@ module.exports = (DATA_BACKEND) => {
       }, 1000);
     });
 
-    it(`should delete a page`, (done) => {
+    it(`should delete a book`, (done) => {
       utils.getRequest(config)
-        .delete(`/api/pages/${id}`)
+        .delete(`/api/books/${id}`)
         .expect(200)
         .expect((response) => {
           assert.equal(response.text, `OK`);
@@ -70,4 +70,3 @@ module.exports = (DATA_BACKEND) => {
     });
   });
 };
-

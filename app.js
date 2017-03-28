@@ -16,6 +16,9 @@
 const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
+const session = require('express-session');
+const MemcachedStore = require('connect-memcached')(session);
+const passport = require('passport');
 const config = require('./config');
 const nunjucks = require('nunjucks');
 const nunjucksDateFilter = require('nunjucks-date-filter');
@@ -39,6 +42,31 @@ app.use(helmet.contentSecurityPolicy({
 }))
 app.disable('x-powered-by');
 app.set('trust proxy', true);
+
+// [START session]
+// Configure the session and session storage.
+const sessionConfig = {
+  resave: false,
+  saveUninitialized: false,
+  secret: config.get('SECRET'),
+  signed: true
+};
+
+// In production use the App Engine Memcache instance to store session data,
+// otherwise fallback to the default MemoryStore in development.
+if (config.get('NODE_ENV') === 'production') {
+  sessionConfig.store = new MemcachedStore({
+    hosts: [config.get('MEMCACHE_URL')]
+  });
+}
+
+app.use(session(sessionConfig));
+// [END session]
+
+// OAuth2
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(require('./lib/oauth2').router);
 
 // Pages
 app.use(express.static('static'))

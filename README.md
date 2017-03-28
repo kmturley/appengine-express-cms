@@ -19,9 +19,17 @@ Install the project dependancies using:
 Create a file at /config.json containing your settings:
 
     {
+        "CLOUD_BUCKET": "your-bucket-name",
         "GCLOUD_PROJECT": "your-gcloud-project-name",
-        "DATA_BACKEND": "datastore"
+        "DATA_BACKEND": "datastore",
+        "MEMCACHE_URL": "[YOUR_MEMCACHE_URL]",
+        "OAUTH2_CLIENT_ID": "[YOUR_OAUTH2_CLIENT_ID]",
+        "OAUTH2_CLIENT_SECRET": "[YOUR_OAUTH2_CLIENT_SECRET]",
+        "OAUTH2_CALLBACK": "http://localhost:8080/auth/google/callback",
     }
+
+You can follow the guide at:
+https://cloud.google.com/appengine/docs/flexible/nodejs/authenticating-users
 
 ## Usage
 
