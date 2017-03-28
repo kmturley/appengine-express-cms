@@ -23,7 +23,7 @@ const nunjucksDateFilter = require('nunjucks-date-filter');
 const app = express();
 app.locals.date = new Date();
 app.disable('etag');
-const env = nunjucks.configure('views', {
+const env = nunjucks.configure('templates', {
     autoescape: false,
     express: app
 });
@@ -41,7 +41,7 @@ app.disable('x-powered-by');
 app.set('trust proxy', true);
 
 // Pages
-app.use(express.static('public'))
+app.use(express.static('static'))
 app.use('/pages', require('./pages/templates'));
 app.use('/admin', require('./pages/crud'));
 app.use('/api/pages', require('./pages/api'));

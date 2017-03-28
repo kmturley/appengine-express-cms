@@ -44,8 +44,9 @@ Use the build command to optimise
 ## Directory structure
 
     pages/                       --> API
+    static/                      --> Static assets
+    templates/                   --> Dynamic templates
     test/                        --> Tests
-    views/                       --> Frontend templates
 
 
 ## Contact
